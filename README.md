@@ -39,7 +39,7 @@ The service starts on `http://localhost:8080` by default. Override the port with
 
 ## API
 
-### Find matching words
+### Find Words With Given Letters
 
 ```http
 POST /api/v1/wordfinder/letters
@@ -50,7 +50,7 @@ Request body:
 
 ```json
 {
-  "letters": "triangle"
+  "letters": "heyyousgwwtoaiaidiuigiugiuaaasrartdgf"
 }
 ```
 
