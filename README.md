@@ -2,24 +2,11 @@
 
 Word Finder is a Spring Boot REST API that identifies dictionary words constructible from a supplied set of letters and ranks the results by letter score.
 
-The search checks each dictionary entry against a letter-frequency table instead of generating permutations. This keeps lookup work proportional to the dictionary size and avoids factorial growth as the input gets longer.
-
-## Features
-
-- Finds all dictionary words that can be built from the supplied letters
-- Prevents a letter from being reused unless it appears multiple times in the input
-- Scores matches using configurable per-letter values
-- Sorts results by descending score and then alphabetically
-- Accepts uppercase or lowercase input
-- Publishes an OpenAPI specification and interactive Swagger UI
-- Includes a non-root, multi-stage Docker image
-
 ## Technology
 
 - Java 17
 - Spring Boot 4.1
-- Maven Wrapper
-- springdoc-openapi 3.0
+- Maven
 - JUnit 5
 - Docker
 
@@ -70,28 +57,39 @@ Request body:
 Example request:
 
 ```bash
-curl --request POST \
-  --url http://localhost:8080/api/v1/wordfinder/letters \
-  --header "Content-Type: application/json" \
-  --data '{"letters":"triangle"}'
+curl -X POST http://localhost:8080/api/v1/wordfinder/letters?limit=10 -H "Content-Type: application
+/json" -d '{"letters":"heyyousgwwtoaiaidiuigiugiuaaasrartdgf"}'  
 ```
 
 Example response:
 
 ```json
 [
-  {
-    "key": "triangle",
-    "value": 9
-  },
-  {
-    "key": "altering",
-    "value": 9
-  }
+  {"key":"southwestward","value":23},
+  {"key":"straightaways","value":22},
+  {"key":"wigwagged","value":22},
+  {"key":"goddaughters","value":21},
+  {"key":"straightaway","value":21},
+  {"key":"dogfought","value":20},
+  {"key":"footdraggers","value":20},
+  {"key":"foreshadows","value":20},
+  {"key":"goddaughter","value":20},
+  {"key":"guitarfishes","value":20}
 ]
 ```
 
 The endpoint returns HTTP `202 Accepted`. Each result contains the dictionary word in `key` and its calculated score in `value`.
+
+Use the optional `limit` query parameter to return only the highest-scoring results. For example, this request returns the top 10 highest scoring matches:
+
+```bash
+curl --request POST \
+  --url "http://localhost:8080/api/v1/wordfinder/letters?limit=10" \
+  --header "Content-Type: application/json" \
+  --data '{"letters":"triangle"}'
+```
+
+The limit must be greater than zero. Omitting it returns every matching word.
 
 ## OpenAPI documentation
 

@@ -33,6 +33,22 @@ public class WordFinder {
      * @return matching words ordered by descending score, then alphabetically
      */
     public ArrayList<Map.Entry<String, Integer>> getWordAndScore(String letters) {
+        return getWordAndScore(letters, null);
+    }
+
+    /**
+     * Finds and scores dictionary words, optionally returning only the highest
+     * scoring results.
+     *
+     * @param letters letters available to build words
+     * @param limit maximum number of results, or {@code null} for all results
+     * @return matching words ordered by descending score, then alphabetically
+     */
+    public ArrayList<Map.Entry<String, Integer>> getWordAndScore(String letters, Integer limit) {
+        if (limit != null && limit < 1) {
+            throw new IllegalArgumentException("limit must be greater than zero");
+        }
+
         ArrayList<Map.Entry<String, Integer>> wordsFound = new ArrayList<>();
         if (letters == null) {
             return wordsFound;
@@ -55,6 +71,9 @@ public class WordFinder {
 
         wordsFound.sort(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder())
                 .thenComparing(Map.Entry.comparingByKey()));
+        if (limit != null && wordsFound.size() > limit) {
+            return new ArrayList<>(wordsFound.subList(0, limit));
+        }
         return wordsFound;
     }
 

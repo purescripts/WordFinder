@@ -44,6 +44,13 @@ class WordFinderTests {
     }
 
     @Test
+    void limitsResultsAfterRankingByScore() {
+        assertThat(wordFinder.getWordAndScore("tact", 2))
+                .extracting(Map.Entry::getKey)
+                .containsExactly("tact", "cat");
+    }
+
+    @Test
     void safelyHandlesInvalidInput() {
         assertThat(wordFinder.getWordAndScore(null)).isEmpty();
         assertThat(wordFinder.getWordAndScore("cat!")).isEmpty();
